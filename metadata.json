@@ -1,0 +1,8 @@
+{
+  "name": "KHAN BUSSINESS",
+  "description": "The ultimate Business Management and Digital Marketing platform for Pakistan, featuring multi-tenant ERP, CRM, and localized AI tools.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
