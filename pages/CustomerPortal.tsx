@@ -16,7 +16,9 @@ import {
   ShieldCheck,
   Timer,
   X as CloseIcon,
-  Check
+  Check,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 interface Props {
@@ -34,6 +36,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
   const [searchQuery, setSearchQuery] = useState("");
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [bargainValue, setBargainValue] = useState("");
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
 
   // Rating Modal state
   const [ratingOrder, setRatingOrder] = useState<Order | null>(null);
@@ -153,6 +156,10 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
     });
     setRatingOrder(null);
     setItemRatings({});
+  };
+
+  const getProductName = (productId: string) => {
+    return products.find(p => p.id === productId)?.name || 'Unknown Product';
   };
 
   return (
@@ -333,34 +340,81 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {orders.map(order => (
-              <div key={order.id} className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm group hover:border-blue-300 transition-colors flex flex-col gap-4">
-                <div className="flex items-center gap-5">
-                  <div className={`w-14 h-14 rounded-[1.25rem] flex items-center justify-center text-xl shrink-0 ${order.status === OrderStatus.COMPLETED ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-slate-50 dark:bg-slate-900 text-slate-300 dark:text-slate-600'}`}>
-                     {order.status === OrderStatus.COMPLETED ? <CheckCircle size={28} /> : <Package size={28} />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-black text-slate-900 dark:text-white text-sm italic uppercase tracking-tighter">#{order.id.slice(-6)}</p>
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'text-blue-600' : 'text-slate-400'}`}>
-                      {statusLabels[order.status]}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-black text-slate-900 dark:text-white text-sm">Rs. {order.totalPrice.toLocaleString()}</p>
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</p>
+            {orders.map(order => {
+              const isExpanded = expandedOrderId === order.id;
+              
+              return (
+                <div 
+                  key={order.id} 
+                  className={`bg-white dark:bg-slate-800 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm group hover:border-blue-300 transition-all flex flex-col cursor-pointer overflow-hidden ${isExpanded ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-950' : ''}`}
+                  onClick={() => setExpandedOrderId(isExpanded ? null : order.id)}
+                >
+                  <div className="p-6 flex flex-col gap-4">
+                    <div className="flex items-center gap-5">
+                      <div className={`w-14 h-14 rounded-[1.25rem] flex items-center justify-center text-xl shrink-0 ${order.status === OrderStatus.COMPLETED ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-slate-50 dark:bg-slate-900 text-slate-300 dark:text-slate-600'}`}>
+                         {order.status === OrderStatus.COMPLETED ? <CheckCircle size={28} /> : <Package size={28} />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-black text-slate-900 dark:text-white text-sm italic uppercase tracking-tighter flex items-center gap-2">
+                          #{order.id.slice(-6)}
+                          {isExpanded ? <ChevronUp size={14} className="text-slate-400" /> : <ChevronDown size={14} className="text-slate-400" />}
+                        </p>
+                        <span className={`text-[9px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'text-blue-600' : 'text-slate-400'}`}>
+                          {statusLabels[order.status]}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-black text-slate-900 dark:text-white text-sm">Rs. {order.totalPrice.toLocaleString()}</p>
+                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+
+                    {isExpanded && (
+                      <div className="pt-4 border-t border-slate-50 dark:border-slate-700 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Order Items</p>
+                        {order.items.map((item, idx) => (
+                          <div key={idx} className="flex justify-between items-center text-xs font-bold">
+                            <div className="flex gap-2">
+                              <span className="text-blue-600 dark:text-blue-400 font-black">{item.quantity}x</span>
+                              <span className="text-slate-700 dark:text-slate-200 uppercase truncate max-w-[120px]">{getProductName(item.productId)}</span>
+                            </div>
+                            <span className="text-slate-400 dark:text-slate-500 tracking-tight">Rs. {(item.price * item.quantity).toLocaleString()}</span>
+                          </div>
+                        ))}
+                        <div className="pt-3 flex flex-col gap-1 border-t border-slate-50 dark:border-slate-700/50">
+                          <div className="flex justify-between text-[10px] font-black uppercase text-slate-400">
+                            <span>Subtotal</span>
+                            <span>Rs. {order.originalPrice.toLocaleString()}</span>
+                          </div>
+                          {order.originalPrice > order.totalPrice && (
+                            <div className="flex justify-between text-[10px] font-black uppercase text-red-500">
+                              <span>Bargain Discount</span>
+                              <span>- Rs. {(order.originalPrice - order.totalPrice).toLocaleString()}</span>
+                            </div>
+                          )}
+                          <div className="flex justify-between text-xs font-black uppercase text-slate-900 dark:text-white mt-1">
+                            <span>Final Total</span>
+                            <span className="text-blue-600 dark:text-blue-400">Rs. {order.totalPrice.toLocaleString()}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {order.status === OrderStatus.COMPLETED && (
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setRatingOrder(order);
+                        }}
+                        className="w-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-all border border-amber-100 dark:border-amber-900/50"
+                      >
+                        <Star size={14} /> Rate Products
+                      </button>
+                    )}
                   </div>
                 </div>
-
-                {order.status === OrderStatus.COMPLETED && (
-                  <button 
-                    onClick={() => setRatingOrder(order)}
-                    className="w-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-all border border-amber-100 dark:border-amber-900/50"
-                  >
-                    <Star size={14} /> Rate Products
-                  </button>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

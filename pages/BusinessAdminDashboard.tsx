@@ -22,7 +22,8 @@ import {
   Info,
   Calendar,
   Layers,
-  ChevronDown
+  ChevronDown,
+  Filter
 } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
 
@@ -65,6 +66,9 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
   const [loadingMarketing, setLoadingMarketing] = useState(false);
   const [generatedPromo, setGeneratedPromo] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  
+  // Filtering state
+  const [orderFilter, setOrderFilter] = useState<OrderStatus | 'ALL'>('ALL');
   
   // Modal states
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
@@ -163,6 +167,13 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
   const totalExpenses = useMemo(() => expenses.reduce((acc, e) => acc + e.amount, 0), [expenses]);
   const netProfit = totalSales - totalExpenses;
 
+  const filteredOrders = useMemo(() => {
+    if (orderFilter === 'ALL') return orders;
+    return orders.filter(o => o.status === orderFilter);
+  }, [orders, orderFilter]);
+
+  const statusFilters = ['ALL', ...Object.values(OrderStatus)];
+
   return (
     <div className="space-y-8 pb-10 animate-in fade-in duration-700">
       {/* Header */}
@@ -224,13 +235,39 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
         <div className="lg:col-span-2 space-y-8">
           {/* Order Management Section */}
           <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-            <div className="p-8 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-              <h3 className="text-lg font-black text-slate-800 dark:text-white italic tracking-tighter uppercase">Live Orders & Bargains</h3>
+            <div className="p-8 border-b border-slate-100 dark:border-slate-700">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <h3 className="text-lg font-black text-slate-800 dark:text-white italic tracking-tighter uppercase">Live Orders & Bargains</h3>
+                <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                  <Filter size={16} />
+                  <span className="text-[10px] font-black uppercase tracking-widest">Filter by status</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+                {statusFilters.map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => setOrderFilter(status as OrderStatus | 'ALL')}
+                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
+                      orderFilter === status
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20'
+                        : 'bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-100 dark:border-slate-700 hover:border-blue-300'
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
             </div>
+            
             <div className="divide-y divide-slate-100 dark:divide-slate-700">
-              {orders.length === 0 ? (
-                <div className="p-20 text-center text-slate-400 dark:text-slate-500 italic font-medium">No order requests found.</div>
-              ) : orders.map(order => (
+              {filteredOrders.length === 0 ? (
+                <div className="p-20 text-center">
+                  <ShoppingBag size={48} className="mx-auto text-slate-200 dark:text-slate-700 mb-4" />
+                  <p className="text-slate-400 dark:text-slate-500 italic font-medium">No orders found matching this filter.</p>
+                </div>
+              ) : filteredOrders.map(order => (
                 <div key={order.id} className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                   <div className="flex gap-4">
                     <div className="w-14 h-14 rounded-[1.25rem] bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 dark:text-slate-400 font-black italic">
@@ -271,7 +308,13 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
                         </button>
                       </>
                     ) : (
-                      <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : 'bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-500'}`}>
+                      <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${
+                        order.status === OrderStatus.COMPLETED 
+                          ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' 
+                          : order.status === OrderStatus.CANCELLED
+                          ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                          : 'bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-500'
+                      }`}>
                         {order.status}
                       </span>
                     )}
@@ -381,7 +424,7 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
             <button 
               onClick={fetchInsight}
               disabled={loadingInsight}
-              className="w-full mt-8 bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-[1.25rem] text-xs font-black uppercase tracking-widest shadow-xl hover:bg-slate-800 dark:hover:bg-slate-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full mt-8 bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-[1.25rem] text-xs font-black uppercase tracking-widest shadow-xl hover:bg-slate-800 dark:hover:bg-blue-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loadingInsight && <Loader2 size={16} className="animate-spin" />}
               {loadingInsight ? 'Consulting Gemini...' : 'Analyze Profitability'}
@@ -408,7 +451,7 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
                   </div>
                   <div className="flex justify-between text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
                     <span>Level</span>
-                    <span className={p.stock < 20 ? 'text-red-500' : 'text-slate-900 dark:text-slate-300'}>{p.stock}</span>
+                    <span className={p.stock < 20 ? 'text-red-500' : 'text-slate-900 dark:text-white'}>{p.stock}</span>
                   </div>
                   <div className="h-2 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full transition-all ${p.stock < 20 ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${Math.min(p.stock, 100)}%` }} />

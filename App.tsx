@@ -9,7 +9,6 @@ import CustomerPortal from './pages/CustomerPortal';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
-import AIChatbot from './components/AIChatbot';
 import MobileNav from './components/MobileNav';
 import MobileSearchModal from './components/MobileSearchModal';
 import MobileSidebar from './components/MobileSidebar';
@@ -152,7 +151,6 @@ const App: React.FC = () => {
         business={activeBusiness}
         onLogout={handleLogout}
       />
-      <AIChatbot user={currentUser} business={activeBusiness} />
     </div>
   );
 };
