@@ -13,7 +13,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-10">
-          <div className="w-20 h-20 bg-green-500 rounded-3xl mx-auto mb-4 flex items-center justify-center text-3xl font-black text-white shadow-xl shadow-green-500/20 italic">
+          <div className="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-4 flex items-center justify-center text-3xl font-black text-white shadow-xl shadow-blue-600/20 italic">
             KB
           </div>
           <h1 className="text-4xl font-black text-white mb-2 tracking-tighter uppercase italic">KHAN BUSSINESS</h1>
@@ -29,14 +29,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 SUPER_ADMIN: <ShieldCheck className="text-purple-400" />,
                 BUSINESS_ADMIN: <Store className="text-blue-400" />,
                 STAFF: <Briefcase className="text-orange-400" />,
-                CUSTOMER: <UserIcon className="text-green-400" />,
+                CUSTOMER: <UserIcon className="text-blue-400" />,
               }[user.role];
 
               return (
                 <button
                   key={user.id}
                   onClick={() => onLogin(user)}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-700/50 border border-slate-600 hover:border-green-500 hover:bg-slate-700 transition-all text-left group"
+                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-700/50 border border-slate-600 hover:border-blue-500 hover:bg-slate-700 transition-all text-left group"
                 >
                   <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                     {Icon}
@@ -45,7 +45,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                     <p className="text-white font-bold">{user.name}</p>
                     <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{user.role.replace('_', ' ')}</p>
                   </div>
-                  <div className="text-slate-500 group-hover:text-green-500 transition-colors">
+                  <div className="text-slate-500 group-hover:text-blue-500 transition-colors">
                     →
                   </div>
                 </button>

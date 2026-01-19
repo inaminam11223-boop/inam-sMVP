@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { User, UserRole, Business, Product, Order, OrderStatus, Expense } from './types';
 import { MOCK_USERS, MOCK_BUSINESSES, MOCK_PRODUCTS } from './constants';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
@@ -23,6 +23,23 @@ const App: React.FC = () => {
   
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('khan_theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+  
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('khan_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('khan_theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => setIsDarkMode(prev => !prev);
   
   const handleLogin = (user: User) => setCurrentUser(user);
   const handleLogout = () => setCurrentUser(null);
@@ -63,7 +80,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden relative">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden relative transition-colors duration-300">
       <Sidebar user={currentUser} onLogout={handleLogout} business={activeBusiness} />
       
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
@@ -72,9 +89,11 @@ const App: React.FC = () => {
           business={activeBusiness} 
           onToggleSidebar={() => setIsSidebarOpen(true)}
           onOpenSearch={() => setIsSearchOpen(true)}
+          isDarkMode={isDarkMode}
+          onToggleTheme={toggleDarkMode}
         />
         
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 lg:pb-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 lg:pb-8 no-scrollbar">
           <div className="max-w-7xl mx-auto space-y-6">
             {currentUser.role === UserRole.SUPER_ADMIN && (
               <SuperAdminDashboard 

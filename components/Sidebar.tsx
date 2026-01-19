@@ -57,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, business }) => {
     <div className="w-64 bg-slate-900 text-slate-300 hidden lg:flex flex-col h-full border-r border-slate-800">
       <div className="p-6">
         <h1 className="text-xl font-black text-white flex items-center gap-2 tracking-tighter italic">
-          <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center text-xs font-black shadow-lg shadow-green-500/20">KB</div>
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-xs font-black shadow-lg shadow-blue-600/20">KB</div>
           KHAN BUSSINESS
         </h1>
       </div>
@@ -71,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, business }) => {
             key={idx}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all ${
               item.active 
-                ? 'bg-green-600 text-white font-bold shadow-lg shadow-green-600/10' 
+                ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-600/10' 
                 : 'hover:bg-slate-800 hover:text-white'
             }`}
           >
@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, business }) => {
           <div className="flex-1 min-w-0">
             <p className="text-xs font-black text-white truncate">{user.name}</p>
             <div className="flex items-center gap-1">
-               <ShieldCheck size={10} className="text-green-500" />
+               <ShieldCheck size={10} className="text-blue-500" />
                <p className="text-[9px] text-slate-500 truncate capitalize font-bold">{user.role.replace('_', ' ').toLowerCase()}</p>
             </div>
           </div>

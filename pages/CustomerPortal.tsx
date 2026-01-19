@@ -174,7 +174,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
             placeholder="Search products..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-14 pr-6 py-5 bg-white border border-slate-100 rounded-[2rem] shadow-2xl shadow-slate-200/50 outline-none focus:ring-2 focus:ring-green-500 font-bold transition-all"
+            className="w-full pl-14 pr-6 py-5 bg-white dark:bg-slate-800 dark:text-white border border-slate-100 dark:border-slate-700 rounded-[2rem] shadow-2xl shadow-slate-200/50 outline-none focus:ring-2 focus:ring-blue-500 font-bold transition-all"
           />
         </div>
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
@@ -185,7 +185,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
               className={`px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
                 selectedCategory === cat 
                   ? 'bg-slate-900 text-white border-slate-900 shadow-xl' 
-                  : 'bg-white text-slate-500 border-slate-100 hover:border-green-300'
+                  : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-100 dark:border-slate-700 hover:border-blue-300'
               }`}
             >
               {cat}
@@ -197,11 +197,11 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
       {/* Live Tracker */}
       {activeOrder && (
         <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/5 overflow-hidden relative group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
           <div className="relative z-10">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-green-500/20">
+                <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
                   <Truck size={28} className="animate-bounce" />
                 </div>
                 <div>
@@ -209,8 +209,8 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                   <div className="flex flex-wrap items-center gap-3 mt-1">
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">ORDER ID: <span className="text-white">#{activeOrder.id.slice(-6)}</span></p>
                     {estimatedArrival && (
-                      <span className="flex items-center gap-1.5 px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-500/30">
-                        <Timer size={12} /> {estimatedArrival}
+                      <span className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-500/30">
+                        <Clock size={12} /> {estimatedArrival}
                       </span>
                     )}
                   </div>
@@ -218,7 +218,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
               </div>
               <div className="bg-white/10 px-6 py-3 rounded-2xl backdrop-blur-md border border-white/5 text-center min-w-[160px]">
                 <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">Current Status</p>
-                <p className="text-green-400 font-black uppercase italic tracking-tighter leading-none">{statusLabels[activeOrder.status]}</p>
+                <p className="text-blue-400 font-black uppercase italic tracking-tighter leading-none">{statusLabels[activeOrder.status]}</p>
               </div>
             </div>
 
@@ -226,7 +226,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
             <div className="relative flex items-center justify-between max-w-3xl mx-auto px-4">
               <div className="absolute left-10 right-10 h-1 bg-slate-800 top-1/2 -translate-y-1/2 z-0">
                 <div 
-                  className="h-full bg-green-500 transition-all duration-1000" 
+                  className="h-full bg-blue-600 transition-all duration-1000" 
                   style={{ width: `${((getStatusStep(activeOrder.status) - 1) / 3) * 100}%` }}
                 ></div>
               </div>
@@ -244,13 +244,13 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                 return (
                   <div key={idx} className="relative z-10 flex flex-col items-center gap-3">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-4 transition-all duration-500 ${
-                      isCompleted ? 'bg-green-500 border-green-500 text-white' :
-                      isActive ? 'bg-slate-900 border-green-500 text-green-500 scale-125 shadow-lg shadow-green-500/20 animate-pulse' :
+                      isCompleted ? 'bg-blue-600 border-blue-600 text-white' :
+                      isActive ? 'bg-slate-900 border-blue-600 text-blue-600 scale-125 shadow-lg shadow-blue-600/20 animate-pulse' :
                       'bg-slate-900 border-slate-800 text-slate-600'
                     }`}>
                       {step.icon}
                     </div>
-                    <p className={`text-[10px] font-black uppercase tracking-widest whitespace-nowrap ${isActive ? 'text-green-400' : 'text-slate-500'}`}>
+                    <p className={`text-[10px] font-black uppercase tracking-widest whitespace-nowrap ${isActive ? 'text-blue-400' : 'text-slate-500'}`}>
                       {step.label}
                     </p>
                   </div>
@@ -269,28 +269,28 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
           const { avg, count } = getAverageRating(product.id);
           
           return (
-            <div key={product.id} className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 group hover:shadow-2xl hover:-translate-y-2 transition-all">
+            <div key={product.id} className="bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-700 group hover:shadow-2xl hover:-translate-y-2 transition-all">
               <div className="relative h-44 overflow-hidden">
                 <img src={product.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={product.name} />
                 <div className="absolute top-4 right-4 bg-slate-900 text-white px-3 py-1.5 rounded-full text-[10px] font-black italic shadow-lg">
                   Rs. {product.price}
                 </div>
                 {count > 0 && (
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-amber-500 px-3 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1 shadow-lg border border-slate-100">
+                  <div className="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-amber-500 px-3 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1 shadow-lg border border-slate-100 dark:border-slate-700">
                     <Star size={12} fill="currentColor" /> {avg} ({count})
                   </div>
                 )}
               </div>
               <div className="p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-[10px] font-black text-green-600 uppercase tracking-widest truncate max-w-[100px]">{biz?.name}</p>
+                  <p className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest truncate max-w-[100px]">{biz?.name}</p>
                   <span className="flex items-center gap-0.5 text-amber-500 font-bold text-[10px]">★ {biz?.rating}</span>
                 </div>
-                <h4 className="font-black text-slate-900 text-lg leading-tight uppercase italic tracking-tight truncate">{product.name}</h4>
+                <h4 className="font-black text-slate-900 dark:text-white text-lg leading-tight uppercase italic tracking-tight truncate">{product.name}</h4>
                 
                 <div className="mt-6">
                   {cartItem ? (
-                    <div className="flex items-center justify-between bg-green-600 rounded-2xl p-1 shadow-lg shadow-green-600/20 animate-in zoom-in duration-200">
+                    <div className="flex items-center justify-between bg-blue-600 rounded-2xl p-1 shadow-lg shadow-blue-600/20 animate-in zoom-in duration-200">
                       <button 
                         onClick={() => removeFromCart(product.id)}
                         className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
@@ -308,7 +308,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                   ) : (
                     <button 
                       onClick={() => addToCart(product)}
-                      className="w-full bg-slate-100 text-slate-800 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-green-600 hover:text-white transition-all flex items-center justify-center gap-2 active:scale-95"
+                      className="w-full bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center gap-2 active:scale-95"
                     >
                       <Plus size={14} /> Add to Cart
                     </button>
@@ -322,31 +322,31 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
 
       {/* Order History */}
       <div className="space-y-6 pt-12">
-        <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter flex items-center gap-3">
-          <Clock size={28} className="text-green-600" /> Order History
+        <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter flex items-center gap-3">
+          <Clock size={28} className="text-blue-600" /> Order History
         </h2>
         
         {orders.length === 0 ? (
-          <div className="bg-white p-20 text-center rounded-[2.5rem] border-2 border-dashed border-slate-200 text-slate-400">
+          <div className="bg-white dark:bg-slate-800 p-20 text-center rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-400">
             <Package size={60} className="mx-auto mb-4 opacity-10" />
             <p className="font-bold text-lg">No active orders found.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orders.map(order => (
-              <div key={order.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm group hover:border-green-300 transition-colors flex flex-col gap-4">
+              <div key={order.id} className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm group hover:border-blue-300 transition-colors flex flex-col gap-4">
                 <div className="flex items-center gap-5">
-                  <div className={`w-14 h-14 rounded-[1.25rem] flex items-center justify-center text-xl shrink-0 ${order.status === OrderStatus.COMPLETED ? 'bg-green-100 text-green-600' : 'bg-slate-50 text-slate-300'}`}>
+                  <div className={`w-14 h-14 rounded-[1.25rem] flex items-center justify-center text-xl shrink-0 ${order.status === OrderStatus.COMPLETED ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-slate-50 dark:bg-slate-900 text-slate-300 dark:text-slate-600'}`}>
                      {order.status === OrderStatus.COMPLETED ? <CheckCircle size={28} /> : <Package size={28} />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-black text-slate-900 text-sm italic uppercase tracking-tighter">#{order.id.slice(-6)}</p>
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'text-green-600' : 'text-slate-400'}`}>
+                    <p className="font-black text-slate-900 dark:text-white text-sm italic uppercase tracking-tighter">#{order.id.slice(-6)}</p>
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'text-blue-600' : 'text-slate-400'}`}>
                       {statusLabels[order.status]}
                     </span>
                   </div>
                   <div className="text-right">
-                    <p className="font-black text-slate-900 text-sm">Rs. {order.totalPrice.toLocaleString()}</p>
+                    <p className="font-black text-slate-900 dark:text-white text-sm">Rs. {order.totalPrice.toLocaleString()}</p>
                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>
@@ -354,7 +354,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                 {order.status === OrderStatus.COMPLETED && (
                   <button 
                     onClick={() => setRatingOrder(order)}
-                    className="w-full bg-amber-50 text-amber-600 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-100 transition-all border border-amber-100"
+                    className="w-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-all border border-amber-100 dark:border-amber-900/50"
                   >
                     <Star size={14} /> Rate Products
                   </button>
@@ -364,55 +364,6 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
           </div>
         )}
       </div>
-
-      {/* Rating Modal */}
-      {ratingOrder && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
-           <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in duration-200">
-              <div className="flex justify-between items-center mb-6">
-                 <h2 className="text-xl font-black italic uppercase tracking-tighter">Rate Your Items</h2>
-                 <button onClick={() => setRatingOrder(null)} className="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors"><CloseIcon size={20}/></button>
-              </div>
-              <div className="space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar pr-1">
-                 {ratingOrder.items.map(item => {
-                   const product = products.find(p => p.id === item.productId);
-                   if (!product) return null;
-                   return (
-                     <div key={item.productId} className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <div className="flex items-center gap-4 mb-3">
-                           <img src={product.image} className="w-12 h-12 rounded-xl object-cover" />
-                           <div className="flex-1 min-w-0">
-                              <p className="text-xs font-black uppercase truncate">{product.name}</p>
-                              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{product.category}</p>
-                           </div>
-                        </div>
-                        <div className="flex items-center justify-center gap-2">
-                           {[1, 2, 3, 4, 5].map(num => (
-                             <button 
-                                key={num}
-                                onClick={() => setItemRatings(prev => ({ ...prev, [item.productId]: num }))}
-                                className={`p-1.5 transition-all transform active:scale-90 ${itemRatings[item.productId] >= num ? 'text-amber-500 scale-110' : 'text-slate-300 hover:text-amber-200'}`}
-                             >
-                                <Star size={24} fill={itemRatings[item.productId] >= num ? "currentColor" : "none"} />
-                             </button>
-                           ))}
-                        </div>
-                     </div>
-                   );
-                 })}
-              </div>
-              <div className="mt-8">
-                 <button 
-                   onClick={handleRateSubmit}
-                   disabled={Object.keys(itemRatings).length === 0}
-                   className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                 >
-                    <Check size={16} /> Submit Feedback
-                 </button>
-              </div>
-           </div>
-        </div>
-      )}
 
       {/* Checkout Bar */}
       {cart.length > 0 && (
@@ -424,12 +375,12 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">{cart.reduce((a, b) => a + b.qty, 0)} Items Selected</p>
               </div>
               <div className="text-right">
-                <p className="text-green-400 text-2xl font-black">Rs. {currentTotal.toLocaleString()}</p>
+                <p className="text-blue-400 text-2xl font-black">Rs. {currentTotal.toLocaleString()}</p>
               </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-3">
-              <button onClick={() => placeOrder()} className="flex-1 bg-green-500 text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 hover:bg-green-400 active:scale-95 transition-all shadow-xl shadow-green-500/20">
+              <button onClick={() => placeOrder()} className="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 hover:bg-blue-500 active:scale-95 transition-all shadow-xl shadow-blue-600/20">
                 Confirm Order
               </button>
               <button onClick={() => { setBargainValue(Math.round(currentTotal * 0.9).toString()); setIsBargainModalOpen(true); }} className="flex-1 bg-white/10 text-white border border-white/20 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 hover:bg-white/20 active:scale-95 transition-all">
@@ -437,30 +388,6 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
               </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Bargain Modal */}
-      {isBargainModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
-           <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in duration-200">
-              <div className="flex justify-between items-center mb-6">
-                 <h2 className="text-xl font-black italic uppercase tracking-tighter">Bargain Proposal</h2>
-                 <button onClick={() => setIsBargainModalOpen(false)} className="p-2 bg-slate-100 rounded-full"><CloseIcon size={20}/></button>
-              </div>
-              <div className="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Original Total</p>
-                 <p className="text-lg font-black text-slate-900">Rs. {currentTotal.toLocaleString()}</p>
-              </div>
-              <div className="space-y-6">
-                 <div>
-                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2 block">Your Offer (PKR)</label>
-                    <input autoFocus type="number" value={bargainValue} onChange={e => setBargainValue(e.target.value)} className="w-full px-5 py-4 bg-slate-100 rounded-2xl border-none font-black text-xl outline-none focus:ring-2 focus:ring-amber-500 text-amber-600" />
-                 </div>
-                 <button onClick={() => placeOrder(parseInt(bargainValue))} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:bg-slate-800 transition-all">Submit Offer to Shop</button>
-                 <p className="text-[9px] text-slate-400 text-center font-bold uppercase tracking-widest">The shop owner will review and accept/counter your offer.</p>
-              </div>
-           </div>
         </div>
       )}
     </div>

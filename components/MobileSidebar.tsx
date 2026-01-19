@@ -85,7 +85,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose, user, on
               onClick={onClose}
               className={`w-full flex items-center gap-4 px-4 py-4 rounded-2xl text-base transition-all ${
                 item.active 
-                  ? 'bg-green-600 text-white font-bold shadow-lg shadow-green-600/20' 
+                  ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-600/20' 
                   : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
             >
@@ -97,13 +97,13 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose, user, on
 
         <div className="p-6 border-t border-slate-800 bg-slate-900/50">
           <div className="flex items-center gap-4 mb-6 p-4 rounded-2xl bg-slate-800/50 border border-slate-700/50">
-            <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center font-black text-white uppercase border-2 border-green-500 shadow-lg shadow-green-500/10">
+            <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center font-black text-white uppercase border-2 border-blue-600 shadow-lg shadow-blue-600/10">
                {user.name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-black text-white truncate">{user.name}</p>
               <div className="flex items-center gap-1">
-                <ShieldCheck size={12} className="text-green-500" />
+                <ShieldCheck size={12} className="text-blue-500" />
                 <p className="text-xs text-slate-500 font-bold uppercase truncate">{user.role.replace('_', ' ')}</p>
               </div>
             </div>
