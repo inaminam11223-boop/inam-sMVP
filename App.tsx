@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { User, UserRole, Business, Product, Order, OrderStatus, Expense } from './types';
 import { MOCK_USERS, MOCK_BUSINESSES, MOCK_PRODUCTS } from './constants';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
@@ -134,6 +135,7 @@ const App: React.FC = () => {
         onLogout={handleLogout}
       />
       <AIChatbot user={currentUser} business={activeBusiness} />
+      <Analytics />
     </div>
   );
 };
