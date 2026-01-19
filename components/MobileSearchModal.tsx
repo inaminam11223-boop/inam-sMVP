@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Store, Package, ArrowLeft, Loader2 } from 'lucide-react';
+import { Search, X, Store, Package, ArrowLeft, Loader2, Star } from 'lucide-react';
 import { MOCK_BUSINESSES, MOCK_PRODUCTS } from '../constants';
 
 interface MobileSearchModalProps {
@@ -56,6 +56,12 @@ const MobileSearchModal: React.FC<MobileSearchModalProps> = ({ isOpen, onClose }
 
     return () => clearTimeout(fetchTimer);
   }, [query]);
+
+  const getProductRating = (ratings?: number[]) => {
+    if (!ratings || ratings.length === 0) return null;
+    const avg = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1);
+    return { avg, count: ratings.length };
+  };
 
   if (!isOpen) return null;
 
@@ -146,35 +152,51 @@ const MobileSearchModal: React.FC<MobileSearchModalProps> = ({ isOpen, onClose }
                 {isLoading && <Loader2 size={12} className="animate-spin text-green-500" />}
                 {!isLoading && <span className="text-[10px] font-black text-green-600 uppercase tracking-widest bg-green-50 px-2 py-0.5 rounded-full">{suggestions.length} FOUND</span>}
              </div>
-             {suggestions.map((s, idx) => (
-              <button
-                key={idx}
-                className="w-full flex items-center gap-4 p-5 bg-white rounded-[2rem] shadow-sm border border-slate-100 active:scale-[0.97] transition-all text-left group"
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner shrink-0 ${s.type === 'business' ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'}`}>
-                  {s.type === 'business' ? <Store size={24} /> : <Package size={24} />}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-black text-slate-900 text-base truncate uppercase tracking-tight italic">{s.item.name}</p>
-                    {s.type === 'business' && (
-                      <span className="flex items-center gap-0.5 text-amber-500 text-[10px] font-black italic">
-                        ★ {s.item.rating}
-                      </span>
-                    )}
+             {suggestions.map((s, idx) => {
+               const ratingInfo = s.type === 'product' ? getProductRating(s.item.ratings) : null;
+               
+               return (
+                <button
+                  key={idx}
+                  className="w-full flex items-center gap-4 p-5 bg-white rounded-[2rem] shadow-sm border border-slate-100 active:scale-[0.97] transition-all text-left group"
+                  onClick={() => {
+                    onClose();
+                  }}
+                >
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner shrink-0 ${s.type === 'business' ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'}`}>
+                    {s.type === 'business' ? <Store size={24} /> : <Package size={24} />}
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mt-1">
-                    {s.type === 'business' ? `KHAN Partner: ${s.item.type}` : `Category: ${s.item.category}`}
-                  </p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-green-500 group-hover:text-white transition-all">
-                  <ArrowLeft size={16} className="rotate-180" strokeWidth={3} />
-                </div>
-              </button>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="font-black text-slate-900 text-base truncate uppercase tracking-tight italic">{s.item.name}</p>
+                      {s.type === 'business' && (
+                        <span className="flex items-center gap-0.5 text-amber-500 text-[10px] font-black italic">
+                          ★ {s.item.rating}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-1 flex flex-wrap items-center gap-y-1 gap-x-3">
+                      <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">
+                        {s.type === 'business' ? `KHAN Partner: ${s.item.type}` : `${s.item.category}`}
+                      </p>
+                      {s.type === 'product' && (
+                        <>
+                          <span className="text-green-600 font-black text-[11px] uppercase tracking-tighter">Rs. {s.item.price.toLocaleString()}</span>
+                          {ratingInfo && (
+                            <span className="flex items-center gap-1 text-amber-500 text-[10px] font-black">
+                              <Star size={10} fill="currentColor" /> {ratingInfo.avg} ({ratingInfo.count})
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-green-500 group-hover:text-white transition-all">
+                    <ArrowLeft size={16} className="rotate-180" strokeWidth={3} />
+                  </div>
+                </button>
+               );
+             })}
           </div>
         )}
       </div>

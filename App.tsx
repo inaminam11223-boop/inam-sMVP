@@ -32,7 +32,6 @@ const App: React.FC = () => {
     return businesses.find(b => b.id === currentUser.businessId) || null;
   }, [currentUser, businesses]);
 
-  // Handlers for interactive buttons
   const toggleBusinessApproval = (bizId: string) => {
     setBusinesses(prev => prev.map(b => b.id === bizId ? { ...b, isApproved: !b.isApproved } : b));
   };
@@ -43,6 +42,16 @@ const App: React.FC = () => {
 
   const handleUpdateProduct = (updatedProduct: Product) => {
     setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+  };
+
+  const handleRateProduct = (productId: string, rating: number) => {
+    setProducts(prev => prev.map(p => {
+      if (p.id === productId) {
+        const currentRatings = p.ratings || [];
+        return { ...p, ratings: [...currentRatings, rating] };
+      }
+      return p;
+    }));
   };
 
   const handleAddExpense = (newExpense: Expense) => {
@@ -104,6 +113,7 @@ const App: React.FC = () => {
                 orders={orders.filter(o => o.customerId === currentUser.id)}
                 setOrders={setOrders}
                 user={currentUser}
+                onRateProduct={handleRateProduct}
               />
             )}
           </div>

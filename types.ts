@@ -48,6 +48,7 @@ export interface Product {
   stock: number;
   image: string;
   description: string;
+  ratings?: number[]; // Array of ratings (1-5)
 }
 
 export enum OrderStatus {

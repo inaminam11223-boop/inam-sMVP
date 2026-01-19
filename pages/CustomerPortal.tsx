@@ -10,10 +10,13 @@ import {
   Clock,
   CheckCircle,
   Plus,
+  Minus,
   Truck,
   Zap,
   ShieldCheck,
-  X as CloseIcon
+  Timer,
+  X as CloseIcon,
+  Check
 } from 'lucide-react';
 
 interface Props {
@@ -22,14 +25,19 @@ interface Props {
   products: Product[];
   orders: Order[];
   setOrders: React.Dispatch<React.SetStateAction<Order[]>>;
+  onRateProduct?: (productId: string, rating: number) => void;
 }
 
-const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, setOrders }) => {
+const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, setOrders, onRateProduct }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [cart, setCart] = useState<{product: Product, qty: number}[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [bargainValue, setBargainValue] = useState("");
+
+  // Rating Modal state
+  const [ratingOrder, setRatingOrder] = useState<Order | null>(null);
+  const [itemRatings, setItemRatings] = useState<Record<string, number>>({});
 
   const addToCart = (product: Product) => {
     setCart(prev => {
@@ -39,6 +47,20 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
       }
       return [...prev, { product, qty: 1 }];
     });
+  };
+
+  const removeFromCart = (productId: string) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.product.id === productId);
+      if (existing && existing.qty > 1) {
+        return prev.map(item => item.product.id === productId ? { ...item, qty: item.qty - 1 } : item);
+      }
+      return prev.filter(item => item.product.id !== productId);
+    });
+  };
+
+  const getCartItem = (productId: string) => {
+    return cart.find(item => item.product.id === productId);
   };
 
   const placeOrder = (bargainPrice?: number) => {
@@ -75,7 +97,6 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
 
   const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
 
-  // Logic for the live tracker
   const activeOrder = useMemo(() => {
     return orders.find(o => o.status !== OrderStatus.COMPLETED && o.status !== OrderStatus.CANCELLED);
   }, [orders]);
@@ -105,6 +126,33 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
     [OrderStatus.IN_PROGRESS]: 'Being Prepared',
     [OrderStatus.COMPLETED]: 'Delivered',
     [OrderStatus.CANCELLED]: 'Cancelled'
+  };
+
+  const estimatedArrival = useMemo(() => {
+    if (!activeOrder) return null;
+    if (activeOrder.status === OrderStatus.ACCEPTED) {
+      return "Est. Delivery: 45 - 60 mins";
+    }
+    if (activeOrder.status === OrderStatus.ASSIGNED || activeOrder.status === OrderStatus.IN_PROGRESS) {
+      return "Arriving in: 15 - 20 mins";
+    }
+    return null;
+  }, [activeOrder]);
+
+  const getAverageRating = (productId: string) => {
+    const p = products.find(prod => prod.id === productId);
+    if (!p || !p.ratings || p.ratings.length === 0) return { avg: 0, count: 0 };
+    const sum = p.ratings.reduce((a, b) => a + b, 0);
+    return { avg: (sum / p.ratings.length).toFixed(1), count: p.ratings.length };
+  };
+
+  const handleRateSubmit = () => {
+    if (!onRateProduct) return;
+    Object.entries(itemRatings).forEach(([prodId, val]) => {
+      onRateProduct(prodId, val);
+    });
+    setRatingOrder(null);
+    setItemRatings({});
   };
 
   return (
@@ -146,7 +194,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
         </div>
       </div>
 
-      {/* Live Order Tracking Section */}
+      {/* Live Tracker */}
       {activeOrder && (
         <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/5 overflow-hidden relative group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
@@ -158,18 +206,24 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                 </div>
                 <div>
                   <h3 className="text-xl font-black italic uppercase tracking-tighter leading-tight">Live Order Tracking</h3>
-                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">ORDER ID: <span className="text-white">#{activeOrder.id.slice(-6)}</span></p>
+                  <div className="flex flex-wrap items-center gap-3 mt-1">
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">ORDER ID: <span className="text-white">#{activeOrder.id.slice(-6)}</span></p>
+                    {estimatedArrival && (
+                      <span className="flex items-center gap-1.5 px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-500/30">
+                        <Timer size={12} /> {estimatedArrival}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="bg-white/10 px-6 py-3 rounded-2xl backdrop-blur-md border border-white/5">
+              <div className="bg-white/10 px-6 py-3 rounded-2xl backdrop-blur-md border border-white/5 text-center min-w-[160px]">
                 <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">Current Status</p>
-                <p className="text-green-400 font-black uppercase italic tracking-tighter">{statusLabels[activeOrder.status]}</p>
+                <p className="text-green-400 font-black uppercase italic tracking-tighter leading-none">{statusLabels[activeOrder.status]}</p>
               </div>
             </div>
 
             {/* Stepper */}
             <div className="relative flex items-center justify-between max-w-3xl mx-auto px-4">
-              {/* Connector Line */}
               <div className="absolute left-10 right-10 h-1 bg-slate-800 top-1/2 -translate-y-1/2 z-0">
                 <div 
                   className="h-full bg-green-500 transition-all duration-1000" 
@@ -207,9 +261,13 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
         </div>
       )}
 
+      {/* Product Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.map(product => {
           const biz = businesses.find(b => b.id === product.businessId);
+          const cartItem = getCartItem(product.id);
+          const { avg, count } = getAverageRating(product.id);
+          
           return (
             <div key={product.id} className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 group hover:shadow-2xl hover:-translate-y-2 transition-all">
               <div className="relative h-44 overflow-hidden">
@@ -217,6 +275,11 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                 <div className="absolute top-4 right-4 bg-slate-900 text-white px-3 py-1.5 rounded-full text-[10px] font-black italic shadow-lg">
                   Rs. {product.price}
                 </div>
+                {count > 0 && (
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-amber-500 px-3 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1 shadow-lg border border-slate-100">
+                    <Star size={12} fill="currentColor" /> {avg} ({count})
+                  </div>
+                )}
               </div>
               <div className="p-5">
                 <div className="flex items-center justify-between mb-2">
@@ -224,18 +287,40 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
                   <span className="flex items-center gap-0.5 text-amber-500 font-bold text-[10px]">★ {biz?.rating}</span>
                 </div>
                 <h4 className="font-black text-slate-900 text-lg leading-tight uppercase italic tracking-tight truncate">{product.name}</h4>
-                <button 
-                  onClick={() => addToCart(product)}
-                  className="w-full mt-6 bg-slate-100 text-slate-800 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-green-600 hover:text-white transition-all flex items-center justify-center gap-2 active:scale-95"
-                >
-                  <Plus size={14} /> Add to Cart
-                </button>
+                
+                <div className="mt-6">
+                  {cartItem ? (
+                    <div className="flex items-center justify-between bg-green-600 rounded-2xl p-1 shadow-lg shadow-green-600/20 animate-in zoom-in duration-200">
+                      <button 
+                        onClick={() => removeFromCart(product.id)}
+                        className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <span className="font-black text-white text-sm">{cartItem.qty}</span>
+                      <button 
+                        onClick={() => addToCart(product)}
+                        className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => addToCart(product)}
+                      className="w-full bg-slate-100 text-slate-800 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-green-600 hover:text-white transition-all flex items-center justify-center gap-2 active:scale-95"
+                    >
+                      <Plus size={14} /> Add to Cart
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           );
         })}
       </div>
 
+      {/* Order History */}
       <div className="space-y-6 pt-12">
         <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter flex items-center gap-3">
           <Clock size={28} className="text-green-600" /> Order History
@@ -249,34 +334,94 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orders.map(order => (
-              <div key={order.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-green-300 transition-colors">
-                <div className={`w-14 h-14 rounded-[1.25rem] flex items-center justify-center text-xl shrink-0 ${order.status === OrderStatus.COMPLETED ? 'bg-green-100 text-green-600' : 'bg-slate-50 text-slate-300'}`}>
-                   {order.status === OrderStatus.COMPLETED ? <CheckCircle size={28} /> : <Package size={28} />}
+              <div key={order.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm group hover:border-green-300 transition-colors flex flex-col gap-4">
+                <div className="flex items-center gap-5">
+                  <div className={`w-14 h-14 rounded-[1.25rem] flex items-center justify-center text-xl shrink-0 ${order.status === OrderStatus.COMPLETED ? 'bg-green-100 text-green-600' : 'bg-slate-50 text-slate-300'}`}>
+                     {order.status === OrderStatus.COMPLETED ? <CheckCircle size={28} /> : <Package size={28} />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-black text-slate-900 text-sm italic uppercase tracking-tighter">#{order.id.slice(-6)}</p>
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'text-green-600' : 'text-slate-400'}`}>
+                      {statusLabels[order.status]}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-black text-slate-900 text-sm">Rs. {order.totalPrice.toLocaleString()}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-900 text-sm italic uppercase tracking-tighter">#{order.id.slice(-6)}</p>
-                  <span className={`text-[9px] font-black uppercase tracking-widest ${order.status === OrderStatus.COMPLETED ? 'text-green-600' : 'text-slate-400'}`}>
-                    {statusLabels[order.status]}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-black text-slate-900 text-sm">Rs. {order.totalPrice.toLocaleString()}</p>
-                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</p>
-                </div>
+
+                {order.status === OrderStatus.COMPLETED && (
+                  <button 
+                    onClick={() => setRatingOrder(order)}
+                    className="w-full bg-amber-50 text-amber-600 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-100 transition-all border border-amber-100"
+                  >
+                    <Star size={14} /> Rate Products
+                  </button>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Floating UI */}
+      {/* Rating Modal */}
+      {ratingOrder && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
+           <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in duration-200">
+              <div className="flex justify-between items-center mb-6">
+                 <h2 className="text-xl font-black italic uppercase tracking-tighter">Rate Your Items</h2>
+                 <button onClick={() => setRatingOrder(null)} className="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors"><CloseIcon size={20}/></button>
+              </div>
+              <div className="space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar pr-1">
+                 {ratingOrder.items.map(item => {
+                   const product = products.find(p => p.id === item.productId);
+                   if (!product) return null;
+                   return (
+                     <div key={item.productId} className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div className="flex items-center gap-4 mb-3">
+                           <img src={product.image} className="w-12 h-12 rounded-xl object-cover" />
+                           <div className="flex-1 min-w-0">
+                              <p className="text-xs font-black uppercase truncate">{product.name}</p>
+                              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{product.category}</p>
+                           </div>
+                        </div>
+                        <div className="flex items-center justify-center gap-2">
+                           {[1, 2, 3, 4, 5].map(num => (
+                             <button 
+                                key={num}
+                                onClick={() => setItemRatings(prev => ({ ...prev, [item.productId]: num }))}
+                                className={`p-1.5 transition-all transform active:scale-90 ${itemRatings[item.productId] >= num ? 'text-amber-500 scale-110' : 'text-slate-300 hover:text-amber-200'}`}
+                             >
+                                <Star size={24} fill={itemRatings[item.productId] >= num ? "currentColor" : "none"} />
+                             </button>
+                           ))}
+                        </div>
+                     </div>
+                   );
+                 })}
+              </div>
+              <div className="mt-8">
+                 <button 
+                   onClick={handleRateSubmit}
+                   disabled={Object.keys(itemRatings).length === 0}
+                   className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                 >
+                    <Check size={16} /> Submit Feedback
+                 </button>
+              </div>
+           </div>
+        </div>
+      )}
+
+      {/* Checkout Bar */}
       {cart.length > 0 && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-lg px-6 z-50">
           <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl animate-in slide-in-from-bottom-10 duration-500">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h4 className="font-black text-2xl tracking-tighter uppercase italic leading-none">Checkout</h4>
-                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">{cart.length} Items Selected</p>
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">{cart.reduce((a, b) => a + b.qty, 0)} Items Selected</p>
               </div>
               <div className="text-right">
                 <p className="text-green-400 text-2xl font-black">Rs. {currentTotal.toLocaleString()}</p>

@@ -15,8 +15,48 @@ export const MOCK_BUSINESSES: Business[] = [
 ];
 
 export const MOCK_PRODUCTS: Product[] = [
-  { id: 'p1', businessId: 'b1', name: 'Basmati Rice 5kg', category: 'Grain', price: 1200, stock: 50, image: 'https://picsum.photos/seed/rice/400/300', description: 'Premium quality long grain rice' },
-  { id: 'p2', businessId: 'b1', name: 'Sunflower Oil 1L', category: 'Oil', price: 650, stock: 15, image: 'https://picsum.photos/seed/oil/400/300', description: 'Healthy cooking oil' },
-  { id: 'p3', businessId: 'b1', name: 'Red Apples', category: 'Fruit', price: 200, stock: 100, image: 'https://picsum.photos/seed/apple/400/300', description: 'Fresh seasonal apples from Swat' },
-  { id: 'p4', businessId: 'b1', name: 'Khyber Tea Leaves', category: 'Beverage', price: 450, stock: 30, image: 'https://picsum.photos/seed/tea/400/300', description: 'Strong black tea' }
+  { 
+    id: 'p1', 
+    businessId: 'b1', 
+    name: 'Basmati Rice 5kg', 
+    category: 'Grain', 
+    price: 1200, 
+    stock: 50, 
+    image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80', 
+    description: 'Premium quality long grain rice',
+    ratings: [5, 4, 5, 5, 4]
+  },
+  { 
+    id: 'p2', 
+    businessId: 'b1', 
+    name: 'Sunflower Oil 1L', 
+    category: 'Oil', 
+    price: 650, 
+    stock: 15, 
+    image: 'https://images.unsplash.com/photo-1474979266404-7eaacabc88c5?auto=format&fit=crop&w=800&q=80', 
+    description: 'Healthy cooking oil',
+    ratings: [4, 4, 3, 5]
+  },
+  { 
+    id: 'p3', 
+    businessId: 'b1', 
+    name: 'Red Apples', 
+    category: 'Fruit', 
+    price: 200, 
+    stock: 100, 
+    image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80', 
+    description: 'Fresh seasonal apples from Swat',
+    ratings: [5, 5, 5, 4, 5]
+  },
+  { 
+    id: 'p4', 
+    businessId: 'b1', 
+    name: 'Khyber Tea Leaves', 
+    category: 'Beverage', 
+    price: 450, 
+    stock: 30, 
+    image: 'https://images.unsplash.com/photo-1544787210-2211d74fc119?auto=format&fit=crop&w=800&q=80', 
+    description: 'Strong black tea',
+    ratings: [3, 4, 4]
+  }
 ];

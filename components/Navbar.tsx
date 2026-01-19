@@ -134,9 +134,12 @@ const Navbar: React.FC<NavbarProps> = ({ user, business, onToggleSidebar, onOpen
           <span className="uppercase tracking-tight">Pakistan</span>
         </div>
         
-        <button className="relative p-2 text-slate-500 hover:text-slate-700 transition-colors">
+        <button className="relative p-3 bg-slate-100 rounded-xl text-slate-500 hover:text-green-600 hover:bg-green-50 transition-all active:scale-95 group">
           <Bell size={22} />
-          <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white shadow-sm"></span>
+          <span className="absolute -top-1.5 -right-1.5 min-w-[20px] h-[20px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all">
+            3
+          </span>
+          <span className="absolute -top-1.5 -right-1.5 w-[20px] h-[20px] bg-red-600 rounded-full animate-ping opacity-20 pointer-events-none"></span>
         </button>
 
         <div className="h-8 w-[1px] bg-slate-200 mx-2 hidden md:block"></div>
