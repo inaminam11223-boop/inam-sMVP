@@ -12,10 +12,10 @@ import {
   Store,
   MessageSquare,
   ShieldCheck,
-  ClipboardList,
-  BarChart3,
   FileText,
-  UserCircle
+  ClipboardList,
+  UserCircle,
+  BarChart3
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -34,12 +34,13 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, business }) => {
       { name: 'Platform Stats', icon: <TrendingUp size={18} /> },
     ],
     [UserRole.BUSINESS_ADMIN]: [
-      { name: 'Overview', icon: <LayoutDashboard size={18} />, active: true },
-      { name: 'Inventory', icon: <Package size={18} /> },
-      { name: 'Sales & Orders', icon: <ShoppingBag size={18} /> },
-      { name: 'Accounting', icon: <DollarSign size={18} /> },
-      { name: 'Staff Management', icon: <Users size={18} /> },
+      { name: 'Dashboard', icon: <LayoutDashboard size={18} />, active: true },
+      { name: 'Products', icon: <Package size={18} /> },
+      { name: 'Orders', icon: <ShoppingBag size={18} /> },
+      { name: 'Staff', icon: <Users size={18} /> },
+      { name: 'Finance', icon: <DollarSign size={18} /> },
       { name: 'Marketing', icon: <TrendingUp size={18} /> },
+      { name: 'Reports', icon: <FileText size={18} /> },
     ],
     [UserRole.MANAGER]: [
       { name: 'Dashboard', icon: <LayoutDashboard size={18} />, active: true },
@@ -50,16 +51,18 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, business }) => {
       { name: 'Reports', icon: <FileText size={18} /> },
     ],
     [UserRole.STAFF]: [
-      { name: 'My Tasks', icon: <LayoutDashboard size={18} />, active: true },
-      { name: 'Pending Orders', icon: <ShoppingBag size={18} /> },
-      { name: 'Inventory Check', icon: <Package size={18} /> },
+      { name: 'My Tasks', icon: <ClipboardList size={18} />, active: true },
+      { name: 'Orders Assigned', icon: <ShoppingBag size={18} /> },
+      { name: 'Add Sale', icon: <DollarSign size={18} /> },
       { name: 'Attendance', icon: <Users size={18} /> },
+      { name: 'Profile', icon: <UserCircle size={18} /> },
     ],
     [UserRole.CUSTOMER]: [
-      { name: 'Explore', icon: <LayoutDashboard size={18} />, active: true },
-      { name: 'My Orders', icon: <ShoppingBag size={18} /> },
-      { name: 'Favorites', icon: <Store size={18} /> },
+      { name: 'Browse Businesses', icon: <Store size={18} />, active: true },
+      { name: 'My Cart', icon: <ShoppingBag size={18} /> },
+      { name: 'My Orders', icon: <Package size={18} /> },
       { name: 'Messages', icon: <MessageSquare size={18} /> },
+      { name: 'Profile', icon: <UserCircle size={18} /> },
     ]
   };
 

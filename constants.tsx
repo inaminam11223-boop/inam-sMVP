@@ -2,7 +2,13 @@
 import { UserRole, BusinessType, User, Business, Product } from './types';
 
 export const MOCK_USERS: User[] = [
-  { id: 'u1', name: 'INAM KHAN', email: 'inam@platform.com', role: UserRole.SUPER_ADMIN },
+  { 
+    id: 'u1', 
+    name: 'INAM KHAN', 
+    email: 'inam@platform.com', 
+    role: UserRole.SUPER_ADMIN,
+    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=256&q=80'
+  },
   { id: 'u2', name: 'Khan Enterprise Owner', email: 'owner@shop.com', role: UserRole.BUSINESS_ADMIN, businessId: 'b1' },
   { id: 'u3', name: 'DANYIAL HOTI', email: 'danyial@shop.com', role: UserRole.STAFF, businessId: 'b1' },
   { id: 'u4', name: 'ABDULLAH', email: 'abdullah@gmail.com', role: UserRole.CUSTOMER }

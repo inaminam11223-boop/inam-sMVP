@@ -9,7 +9,6 @@ import CustomerPortal from './pages/CustomerPortal';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
-import MobileNav from './components/MobileNav';
 import MobileSearchModal from './components/MobileSearchModal';
 import MobileSidebar from './components/MobileSidebar';
 
@@ -92,7 +91,7 @@ const App: React.FC = () => {
           onToggleTheme={toggleDarkMode}
         />
         
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 lg:pb-8 no-scrollbar">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-8 no-scrollbar">
           <div className="max-w-7xl mx-auto space-y-6">
             {currentUser.role === UserRole.SUPER_ADMIN && (
               <SuperAdminDashboard 
@@ -102,7 +101,7 @@ const App: React.FC = () => {
               />
             )}
             
-            {currentUser.role === UserRole.BUSINESS_ADMIN && activeBusiness && (
+            {(currentUser.role === UserRole.BUSINESS_ADMIN || currentUser.role === UserRole.MANAGER) && activeBusiness && (
               <BusinessAdminDashboard 
                 business={activeBusiness}
                 products={products.filter(p => p.businessId === activeBusiness.id)}
@@ -112,6 +111,7 @@ const App: React.FC = () => {
                 addProduct={handleAddProduct}
                 updateProduct={handleUpdateProduct}
                 addExpense={handleAddExpense}
+                userRole={currentUser.role}
               />
             )}
             
@@ -136,11 +136,6 @@ const App: React.FC = () => {
             )}
           </div>
         </main>
-        
-        <MobileNav 
-          role={currentUser.role} 
-          onSearchClick={() => setIsSearchOpen(true)} 
-        />
       </div>
 
       <MobileSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

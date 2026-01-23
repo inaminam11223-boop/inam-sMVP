@@ -1,14 +1,47 @@
 
 import React from 'react';
-import { Business, User } from '../types';
+import { Business, User, BusinessType } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Activity, Users, Globe, Building2, CheckCircle, XCircle } from 'lucide-react';
+import { 
+  Activity, 
+  Users, 
+  Globe, 
+  Building2, 
+  CheckCircle, 
+  XCircle,
+  Carrot,
+  Store,
+  ShoppingCart,
+  Utensils,
+  Scissors,
+  Home,
+  Truck,
+  Factory,
+  Package,
+  Briefcase
+} from 'lucide-react';
 
 interface Props {
   businesses: Business[];
   toggleApproval: (id: string) => void;
   allUsers: User[];
 }
+
+const getBusinessIcon = (type: BusinessType) => {
+  switch (type) {
+    case BusinessType.FRUIT_VEG: return <Carrot size={12} />;
+    case BusinessType.RETAIL: return <Store size={12} />;
+    case BusinessType.GROCERY: return <ShoppingCart size={12} />;
+    case BusinessType.RESTAURANT: return <Utensils size={12} />;
+    case BusinessType.SALON: return <Scissors size={12} />;
+    case BusinessType.REAL_ESTATE: return <Home size={12} />;
+    case BusinessType.TRANSPORT: return <Truck size={12} />;
+    case BusinessType.MANUFACTURING: return <Factory size={12} />;
+    case BusinessType.WHOLESALE: return <Package size={12} />;
+    case BusinessType.ENTERPRISE: return <Building2 size={12} />;
+    default: return <Briefcase size={12} />;
+  }
+};
 
 const SuperAdminDashboard: React.FC<Props> = ({ businesses, toggleApproval, allUsers }) => {
   const chartData = [
@@ -78,7 +111,10 @@ const SuperAdminDashboard: React.FC<Props> = ({ businesses, toggleApproval, allU
                   </div>
                   <div>
                     <p className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-tight truncate max-w-[120px]">{biz.name}</p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{biz.type}</p>
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                      {getBusinessIcon(biz.type)}
+                      <span>{biz.type}</span>
+                    </div>
                   </div>
                 </div>
                 <button 

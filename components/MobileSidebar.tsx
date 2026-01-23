@@ -12,7 +12,10 @@ import {
   Store,
   MessageSquare,
   X,
-  ShieldCheck
+  ShieldCheck,
+  ClipboardList,
+  BarChart3,
+  FileText
 } from 'lucide-react';
 
 interface MobileSidebarProps {
@@ -40,6 +43,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose, user, on
       { name: 'Staff Management', icon: <Users size={20} /> },
       { name: 'Marketing', icon: <TrendingUp size={20} /> },
     ],
+    [UserRole.MANAGER]: [
+      { name: 'Dashboard', icon: <LayoutDashboard size={20} />, active: true },
+      { name: 'Orders', icon: <ShoppingBag size={20} /> },
+      { name: 'Inventory', icon: <Package size={20} /> },
+      { name: 'Staff Tasks', icon: <ClipboardList size={20} /> },
+      { name: 'Daily Sales', icon: <BarChart3 size={20} /> },
+      { name: 'Reports', icon: <FileText size={20} /> },
+    ],
     [UserRole.STAFF]: [
       { name: 'My Tasks', icon: <LayoutDashboard size={20} />, active: true },
       { name: 'Pending Orders', icon: <ShoppingBag size={20} /> },
@@ -54,7 +65,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose, user, on
     ]
   };
 
-  const currentMenu = menuItems[user.role];
+  const currentMenu = menuItems[user.role] || [];
 
   if (!isOpen) return null;
 

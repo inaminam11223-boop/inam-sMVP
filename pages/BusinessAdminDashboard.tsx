@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Business, Product, Order, OrderStatus, Expense } from '../types';
+import { Business, Product, Order, OrderStatus, Expense, UserRole } from '../types';
 import { 
   Package, 
   ShoppingBag, 
@@ -36,6 +36,7 @@ interface Props {
   addProduct: (p: Product) => void;
   updateProduct: (p: Product) => void;
   addExpense: (e: Expense) => void;
+  userRole: UserRole;
 }
 
 const CATEGORY_IMAGES: Record<string, string> = {
@@ -60,7 +61,7 @@ const EXPENSE_CATEGORIES = [
   'Miscellaneous'
 ];
 
-const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, expenses, setOrders, addProduct, updateProduct, addExpense }) => {
+const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, expenses, setOrders, addProduct, updateProduct, addExpense, userRole }) => {
   const [insight, setInsight] = useState<string>("");
   const [loadingInsight, setLoadingInsight] = useState(false);
   const [loadingMarketing, setLoadingMarketing] = useState(false);
@@ -174,6 +175,8 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
 
   const statusFilters = ['ALL', ...Object.values(OrderStatus)];
 
+  const isManager = userRole === UserRole.MANAGER;
+
   return (
     <div className="space-y-8 pb-10 animate-in fade-in duration-700">
       {/* Header */}
@@ -189,9 +192,11 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
           </div>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => setIsExpenseModalOpen(true)} className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors dark:text-slate-200">
-            <DollarSign size={14} /> Add Expense
-          </button>
+          {!isManager && (
+            <button onClick={() => setIsExpenseModalOpen(true)} className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors dark:text-slate-200">
+              <DollarSign size={14} /> Add Expense
+            </button>
+          )}
           <button onClick={() => setIsProductModalOpen(true)} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-colors">
             <Plus size={18} /> Add Product
           </button>
@@ -209,11 +214,19 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-3xl"></div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
-          <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Expenses</p>
-          <h3 className="text-2xl font-black text-red-600 dark:text-red-500">Rs. {totalExpenses.toLocaleString()}</h3>
-          <p className="text-slate-400 dark:text-slate-500 text-[10px] font-bold mt-4 italic">{expenses.length} Records</p>
-        </div>
+        {!isManager ? (
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Expenses</p>
+            <h3 className="text-2xl font-black text-red-600 dark:text-red-500">Rs. {totalExpenses.toLocaleString()}</h3>
+            <p className="text-slate-400 dark:text-slate-500 text-[10px] font-bold mt-4 italic">{expenses.length} Records</p>
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Products</p>
+            <h3 className="text-2xl font-black text-slate-900 dark:text-white">{products.length}</h3>
+            <p className="text-slate-400 dark:text-slate-500 text-[10px] font-bold mt-4 italic">Active SKU's</p>
+          </div>
+        )}
 
         <div className="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
           <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Live Pipeline</p>
@@ -224,11 +237,19 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
           </div>
         </div>
 
-        <div className="bg-blue-600 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
-          <p className="text-blue-200 text-[10px] font-black uppercase tracking-widest mb-1">Net Balance</p>
-          <h3 className="text-2xl font-black">Rs. {netProfit.toLocaleString()}</h3>
-          <p className="text-blue-200 text-[10px] font-bold mt-4 uppercase tracking-widest">Target: Rs. 1M</p>
-        </div>
+        {!isManager ? (
+          <div className="bg-blue-600 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
+            <p className="text-blue-200 text-[10px] font-black uppercase tracking-widest mb-1">Net Balance</p>
+            <h3 className="text-2xl font-black">Rs. {netProfit.toLocaleString()}</h3>
+            <p className="text-blue-200 text-[10px] font-bold mt-4 uppercase tracking-widest">Target: Rs. 1M</p>
+          </div>
+        ) : (
+          <div className="bg-blue-600 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
+             <p className="text-blue-200 text-[10px] font-black uppercase tracking-widest mb-1">Daily Target</p>
+             <h3 className="text-2xl font-black">85%</h3>
+             <p className="text-blue-200 text-[10px] font-bold mt-4 uppercase tracking-widest">Completed</p>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -451,7 +472,13 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
                   </div>
                   <div className="flex justify-between text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
                     <span>Level</span>
-                    <span className={p.stock < 20 ? 'text-red-500' : 'text-slate-900 dark:text-white'}>{p.stock}</span>
+                    <button 
+                      onClick={() => quickStockEdit(p.id)} 
+                      className={`hover:scale-125 transition-transform cursor-pointer ${p.stock < 20 ? 'text-red-500' : 'text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400'}`}
+                      title="Update Stock"
+                    >
+                      {p.stock}
+                    </button>
                   </div>
                   <div className="h-2 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full transition-all ${p.stock < 20 ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${Math.min(p.stock, 100)}%` }} />

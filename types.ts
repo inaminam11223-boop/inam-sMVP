@@ -1,7 +1,8 @@
 
 export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
-  BUSINESS_ADMIN = 'BUSINESS_ADMIN',
+  BUSINESS_ADMIN = 'BUSINESS_ADMIN', // Maps to "Admin" (Business Owner)
+  MANAGER = 'MANAGER',
   STAFF = 'STAFF',
   CUSTOMER = 'CUSTOMER'
 }
@@ -26,6 +27,7 @@ export interface User {
   role: UserRole;
   businessId?: string;
   avatar?: string;
+  city?: string; // For Customers
 }
 
 export interface Business {
