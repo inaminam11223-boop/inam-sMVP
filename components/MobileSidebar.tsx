@@ -80,7 +80,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose, user, on
       {/* Drawer */}
       <div className="relative w-80 bg-slate-900 h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
         <div className="p-6 flex items-center justify-between border-b border-slate-800">
-          <h1 className="text-xl font-black text-white italic tracking-tighter">KHAN BUSSINESS</h1>
+          <h1 className="text-xl font-black text-white italic tracking-tighter">MY BUSSINESS</h1>
           <button onClick={onClose} className="p-2 text-slate-400 hover:text-white bg-slate-800 rounded-lg">
             <X size={20} />
           </button>

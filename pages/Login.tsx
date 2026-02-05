@@ -108,10 +108,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           
           <div className="relative z-10">
             <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-2xl font-black mb-8 border border-white/20 backdrop-blur-sm shadow-xl">
-              KB
+              MB
             </div>
             <h1 className="text-4xl font-black italic uppercase tracking-tighter leading-none mb-4">
-              Welcome to <br/> KHAN BUSSINESS
+              Welcome to <br/> MY BUSSINESS
             </h1>
             <p className="text-blue-100 font-medium leading-relaxed opacity-90">
               Pakistan's #1 All-in-One Business Operating System. Manage inventory, staff, and sales in one place.
@@ -311,7 +311,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           </form>
 
           <p className="mt-8 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            © 2024 KHAN BUSSINESS Tech (Pvt) Ltd.
+            © 2024 MY BUSSINESS Tech (Pvt) Ltd.
           </p>
         </div>
       </div>

@@ -169,7 +169,7 @@ const CustomerPortal: React.FC<Props> = ({ user, businesses, products, orders, s
         <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-1000" alt="Market" />
         <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 text-white bg-gradient-to-t from-slate-900/80 to-transparent">
           <h1 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter leading-none">Salam, {user.name}!</h1>
-          <p className="text-slate-300 mt-4 text-base md:text-xl max-w-xl font-medium">Verified goods from Peshawar to Karachi. Quality guaranteed by KHAN network.</p>
+          <p className="text-slate-300 mt-4 text-base md:text-xl max-w-xl font-medium">Verified goods from Peshawar to Karachi. Quality guaranteed by MY BUSSINESS network.</p>
         </div>
       </div>
 

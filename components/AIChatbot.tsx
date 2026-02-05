@@ -13,7 +13,7 @@ interface AIChatbotProps {
 const AIChatbot: React.FC<AIChatbotProps> = ({ user, business }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: 'user' | 'bot', text: string }[]>([
-    { role: 'bot', text: `Assalam-o-Alaikum ${user.name}! I am your KHAN BUSSINESS AI assistant. How can I help you grow your activities today?` }
+    { role: 'bot', text: `Assalam-o-Alaikum ${user.name}! I am your MY BUSSINESS AI assistant. How can I help you grow your activities today?` }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -75,7 +75,7 @@ const AIChatbot: React.FC<AIChatbotProps> = ({ user, business }) => {
                 <Bot size={18} />
               </div>
               <div>
-                <p className="text-sm font-bold uppercase tracking-tighter italic">KHAN AI Assistant</p>
+                <p className="text-sm font-bold uppercase tracking-tighter italic">MY AI Assistant</p>
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
                   <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Active</span>
@@ -116,7 +116,7 @@ const AIChatbot: React.FC<AIChatbotProps> = ({ user, business }) => {
             <div className="relative">
               <input 
                 type="text" 
-                placeholder="Ask KHAN AI anything..."
+                placeholder="Ask MY AI anything..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
@@ -130,7 +130,7 @@ const AIChatbot: React.FC<AIChatbotProps> = ({ user, business }) => {
                 <Send size={14} />
               </button>
             </div>
-            <p className="text-[9px] text-slate-400 mt-2 text-center font-black uppercase tracking-widest">Powered by KHAN Intelligence & Gemini 3 Pro</p>
+            <p className="text-[9px] text-slate-400 mt-2 text-center font-black uppercase tracking-widest">Powered by MY Intelligence & Gemini 3 Pro</p>
           </div>
         </div>
       )}

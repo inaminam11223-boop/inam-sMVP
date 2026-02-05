@@ -61,7 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, business, onToggleSidebar, onOpen
           <Menu size={24} />
         </button>
         <div className="flex flex-col">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">KHAN</span>
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">MY</span>
           <span className="text-sm font-black text-slate-900 dark:text-white tracking-tighter uppercase italic leading-none">BUSSINESS</span>
         </div>
       </div>

@@ -188,7 +188,7 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
             <span>•</span>
             <span className="font-bold text-xs uppercase tracking-widest">{business.type}</span>
             <span>•</span>
-            <span className="text-blue-600 dark:text-blue-400 font-black text-xs uppercase tracking-widest">KHAN Verified</span>
+            <span className="text-blue-600 dark:text-blue-400 font-black text-xs uppercase tracking-widest">Verified</span>
           </div>
         </div>
         <div className="flex gap-2">
@@ -357,7 +357,7 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
               </div>
               <div className="flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <h4 className="text-xl font-black text-slate-900 dark:text-white italic uppercase tracking-tight">KHAN AI Marketing Console</h4>
+                  <h4 className="text-xl font-black text-slate-900 dark:text-white italic uppercase tracking-tight">AI Marketing Console</h4>
                   <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm shadow-blue-600/20">Gemini 3 Flash</span>
                 </div>
                 
@@ -440,7 +440,7 @@ const BusinessAdminDashboard: React.FC<Props> = ({ business, products, orders, e
                 {insight}
               </div>
             ) : (
-              <p className="text-xs text-slate-400 dark:text-slate-500 italic">Tap to analyze KHAN performance.</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 italic">Tap to analyze business performance.</p>
             )}
             <button 
               onClick={fetchInsight}

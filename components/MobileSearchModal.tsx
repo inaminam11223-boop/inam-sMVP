@@ -113,7 +113,7 @@ const MobileSearchModal: React.FC<MobileSearchModalProps> = ({ isOpen, onClose }
         {isLoading && suggestions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
              <Loader2 size={40} className="animate-spin text-blue-500 opacity-20" />
-             <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Scanning KHAN Network...</p>
+             <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Scanning MY BUSSINESS Network...</p>
           </div>
         ) : query.length < 2 ? (
           <div className="text-center py-20 space-y-6">
@@ -121,7 +121,7 @@ const MobileSearchModal: React.FC<MobileSearchModalProps> = ({ isOpen, onClose }
                <Search size={40} />
             </div>
             <div>
-              <p className="font-black text-slate-900 dark:text-white uppercase tracking-tighter text-xl italic leading-none">KHAN BUSSINESS</p>
+              <p className="font-black text-slate-900 dark:text-white uppercase tracking-tighter text-xl italic leading-none">MY BUSSINESS</p>
               <p className="text-sm text-slate-400 dark:text-slate-500 font-bold mt-2 leading-relaxed">Search across Peshawar, Lahore, and Karachi.<br/>Enter 2+ characters to begin.</p>
             </div>
             
@@ -177,7 +177,7 @@ const MobileSearchModal: React.FC<MobileSearchModalProps> = ({ isOpen, onClose }
                     </div>
                     <div className="mt-1 flex flex-wrap items-center gap-y-1 gap-x-3">
                       <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-black tracking-widest">
-                        {s.type === 'business' ? `KHAN Partner: ${s.item.type}` : `${s.item.category}`}
+                        {s.type === 'business' ? `Partner: ${s.item.type}` : `${s.item.category}`}
                       </p>
                       {s.type === 'product' && (
                         <>

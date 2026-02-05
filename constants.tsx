@@ -15,7 +15,7 @@ export const MOCK_USERS: User[] = [
 ];
 
 export const MOCK_BUSINESSES: Business[] = [
-  { id: 'b1', name: 'KHAN BUSSINESS Peshawar', type: BusinessType.GROCERY, ownerId: 'u2', address: 'University Road, Peshawar', rating: 4.8, isApproved: true, marketingBudget: 5000 },
+  { id: 'b1', name: 'MY BUSSINESS Peshawar', type: BusinessType.GROCERY, ownerId: 'u2', address: 'University Road, Peshawar', rating: 4.8, isApproved: true, marketingBudget: 5000 },
   { id: 'b2', name: 'Khyber Tikka House', type: BusinessType.RESTAURANT, ownerId: 'u5', address: 'Namak Mandi', rating: 4.5, isApproved: true, marketingBudget: 3000 },
   { id: 'b3', name: 'Lahore Logistics', type: BusinessType.TRANSPORT, ownerId: 'u6', address: 'GT Road, Lahore', rating: 4.2, isApproved: true, marketingBudget: 10000 }
 ];

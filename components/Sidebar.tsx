@@ -12,10 +12,10 @@ import {
   Store,
   MessageSquare,
   ShieldCheck,
-  ClipboardList,
-  BarChart3,
   FileText,
-  UserCircle
+  ClipboardList,
+  UserCircle,
+  BarChart3
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -69,8 +69,8 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, business }) => {
     <div className="w-64 bg-slate-900 text-slate-300 hidden lg:flex flex-col h-full border-r border-slate-800">
       <div className="p-6">
         <h1 className="text-xl font-black text-white flex items-center gap-2 tracking-tighter italic">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-xs font-black shadow-lg shadow-blue-600/20">KB</div>
-          KHAN BUSSINESS
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-xs font-black shadow-lg shadow-blue-600/20">MB</div>
+          MY BUSSINESS
         </h1>
       </div>
 
